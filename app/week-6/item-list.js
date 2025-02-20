@@ -1,89 +1,105 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Items from "./item";
-import data from "./items.json" assert { type: 'json'};
+import Item from "./item";
+import React, { useState } from "react";
+import items from './items.json';
 
 
-export function LoadItems() {
-  const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('./items.json', {with: {type:"json"},}); 
-        const data = await response.json();
-        setItems(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+export function ItemList() {
+    const[sortBy, setSortBy] = useState("name");
+
+    const handleSortchange = (newSortBy) => {
+        setSortBy(newSortBy);
+    }
+
+    const sortingHat = [...items].sort((a,b) => {
+        if(sortBy === "name") {
+            if(a.name < b.name) {
+                return -1;
+            }
+            if(a.name > b.name) {
+                return 1;
+            }
+            return 0;
+        } else if (sortBy === "category") {
+            if(a.category < b.category) {
+                return -1;
+            }
+            if(a.category > b.category) {
+                return 1;
+            }
+            return 0;
+        } else {
+            return 0;
+        }
+    });
+
+    const groupingHat = () => {
+        if(sortBy === "grouped") {
+            const grouped = items.reduce((acc, item) => {
+                const category = item.category;
+                if(!acc[category]) {
+                    acc[category] = [];
+                }
+                acc[category].push(item);
+                return acc;
+            },{});
+            const sortedCategories = Object.keys(grouped).sort();
+            for(const category in grouped) {
+                grouped[category].sort((a,b) => {
+                    if(a.name < b.name) {
+                        return -1;
+                    }
+                    if(a.name > b.name) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }
+            return sortedCategories.map(category => (
+                <div key={category}>
+                    <h2 className="capitalize">{category}</h2>
+                    {grouped[category].map(item => (
+                        <Item key={item.id} {...item} />
+                    ))}
+                </div>
+            ));
+        } else {
+            return sortingHat.map(item => (
+                <Item key={item.id} {...item} />
+            ));
+        }
     };
-
-    fetchData();
-  }, []);
-
-  return (
-    <div>
-      <h1>My Items</h1>
-      <ul>
-        {items.map((item) => (
-          <Items key={item.id} item={item} /> 
-        ))}
-      </ul>
-    </div>
-  );
+          return (
+            <div>
+                <div className="flex justify-items-start p-5">
+                    <button
+                    onClick={() => handleSortchange("name")}
+                    style={{ backgroundColor: sortBy === "name" ? "lightgray" : "white"}}
+                    className="text-black p-2"
+                    >
+                        Sort By Name
+                    </button>
+                    <div className="p-2"></div>
+                    <button
+                    onClick={() => handleSortchange("category")}
+                    style={{backgroundColor: sortBy === "category" ? "lightgrey" : "white"}}
+                    className="text-black p-2"
+                    >
+                        Sort by Category
+                    </button>
+                    <div className="p-2"></div>
+                    <button
+                    onClick={() => handleSortchange("grouped")}
+                    style={{backgroundColor: sortBy === "category" ? "lightgrey" : "white"}}
+                    className="text-black p-2"
+                    >
+                        Group by Category
+                    </button>
+                </div>
+                <div>
+                {groupingHat()}
+                </div>
+            </div>
+          );
 }
-
-// export function ItemList() {
-//           return (
-//             <>
-//             <Items 
-//             name={item1.name}
-//             quantity={item1.quantity}
-//             category={item1.category}/>
-//             <Items 
-//             name={item2.name}
-//             quantity={item2.quantity}
-//             category={item2.category}/>
-//             <Items 
-//             name={item3.name}
-//             quantity={item3.quantity}
-//             category={item3.category}/>
-//             <Items 
-//             name={item4.name}
-//             quantity={item4.quantity}
-//             category={item4.category}/>
-//             <Items 
-//             name={item5.name}
-//             quantity={item5.quantity}
-//             category={item5.category}/>
-//             <Items 
-//             name={item6.name}
-//             quantity={item6.quantity}
-//             category={item6.category}/>
-//             <Items 
-//             name={item7.name}
-//             quantity={item7.quantity}
-//             category={item7.category}/>
-//             <Items 
-//             name={item8.name}
-//             quantity={item8.quantity}
-//             category={item8.category}/>
-//             <Items 
-//             name={item9.name}
-//             quantity={item9.quantity}
-//             category={item9.category}/>
-//             <Items 
-//             name={item10.name}
-//             quantity={item10.quantity}
-//             category={item10.category}/>
-//             <Items 
-//             name={item11.name}
-//             quantity={item11.quantity}
-//             category={item11.category}/>
-//             <Items 
-//             name={item12.name}
-//             quantity={item12.quantity}
-//             category={item12.category}/>
-//             </>
-//           );
-// }
