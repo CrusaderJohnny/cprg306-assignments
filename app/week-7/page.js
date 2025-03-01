@@ -8,7 +8,9 @@ export default function Page() {
   const [items, setItems] = useState(itemsData);
 
   const itemHandler = (newItem) => {
+    console.log('Before add:', items);
     setItems((prevItems) => [...prevItems, newItem]);
+    console.log('After add:', items);
   };
 
   return (
