@@ -70,7 +70,7 @@ export function ItemList() {
             ));
         }
     };
-          return (
+        return (
             <div>
                 <div className="flex justify-items-start p-5">
                     <button
@@ -101,5 +101,5 @@ export function ItemList() {
                 {groupingHat()}
                 </div>
             </div>
-          );
+        );
 }
