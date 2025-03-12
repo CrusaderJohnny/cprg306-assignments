@@ -17,10 +17,8 @@ export default function NewItem({onAddItem}) {
       setQuantity(quantity - 1);
     }
   };
-
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const genID = (length) => {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let result = '';
@@ -28,10 +26,8 @@ export default function NewItem({onAddItem}) {
       for(let i=0; i < length; i++) {
         result += chars.charAt(Math.floor(Math.random() * charsLength));
       }
-
       return result;
     }
-
     const item = {
       id: genID(18),
       name: name,
@@ -80,7 +76,6 @@ export default function NewItem({onAddItem}) {
         -
       </button>
       <div className="p-2">
-
       </div>
       <button
         onClick={increment}
