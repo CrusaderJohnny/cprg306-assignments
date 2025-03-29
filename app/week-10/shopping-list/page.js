@@ -32,11 +32,11 @@ export default function Page() {
     setSelectedItemName(hyphenatedName);
   };
 
-  const itemHandler = async (docID, newItem) => {
+  const itemHandler = async (newItem) => {
     if(user) {
       try {
         const newItemID = await addItem(user.uid, newItem);
-        setItems((prevItems) => [...prevItems, {...newItem, id: docID}]);
+        setItems((prevItems) => [...prevItems, {...newItem, id: newItemID}]);
       } catch (error) {
         console.error('Error adding item: ', error);
       }

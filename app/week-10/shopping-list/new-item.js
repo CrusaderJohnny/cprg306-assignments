@@ -20,7 +20,7 @@ export default function NewItem({onAddItem, userID}) {
     }
   };
 
-  const handleSubmit = async (event) => { 
+  const handleSubmit = (event) => { 
     event.preventDefault();
 
     const item = {
@@ -30,8 +30,7 @@ export default function NewItem({onAddItem, userID}) {
     };
 
     try {
-      const docRef = await addDoc(collection(db, "users", userID, "items"), item); 
-      onAddItem(docRef.id, item);
+      onAddItem(item);
       event.target.reset();
     } catch (error) {
       console.error("Error adding item:", error);
